@@ -263,21 +263,35 @@ TEST(SM80_Device_GemmWithBroadcast_GELU_f16n_f16n_f16n_tensor_op_f32, 128x128_32
     cutlass::epilogue::thread::GELU_taylor<float>
   >;
 
+  /* TODO(jacobhess118) questions:
+  1. How does thread-block swizzling work?
+  2. What are the 5 stages used in the pipelined mainloop?
+  3. What other operations can be performed by GEMM (besides OpMultiplyAdd)?
+  */
+
+  // Doc for `DefaultGemmWithBroadcast`: include/cutlass/gemm/kernel/default_gemm_with_broadcast.h
   using GemmKernel = 
     typename cutlass::gemm::kernel::DefaultGemmWithBroadcast<
-      cutlass::half_t, cutlass::layout::RowMajor, cutlass::ComplexTransform::kNone, 8,    // transposed B operand
-      cutlass::half_t, cutlass::layout::RowMajor, cutlass::ComplexTransform::kNone, 8,    // transposed A operand
-      cutlass::half_t, cutlass::layout::RowMajor,
-      float,
-      cutlass::arch::OpClassTensorOp,
-      cutlass::arch::Sm80,
-      cutlass::gemm::GemmShape<128, 128, 32>,
-      cutlass::gemm::GemmShape<64, 64, 32>,
-      cutlass::gemm::GemmShape<16, 8, 16>,
-      EpilogueOutputOp,
-      cutlass::gemm::threadblock::GemmIdentityThreadblockSwizzle<8>,
-      5,
-      cutlass::arch::OpMultiplyAdd
+      cutlass::half_t, /// Element type for A matrix operand
+      cutlass::layout::RowMajor, /// Layout type for A matrix operand
+      cutlass::ComplexTransform::kNone, /// Complex elementwise transformation on A operand
+      8, // transposed B operand /// Access granularity of A matrix in units of elements
+      cutlass::half_t, /// Element type for B matrix operand
+      cutlass::layout::RowMajor, /// Layout type for B matrix operand
+      cutlass::ComplexTransform::kNone, /// Complex elementwise transformation on B operand
+      8, // transposed A operand /// Access granularity of B matrix in units of elements
+      cutlass::half_t, /// Element type for C and D matrix operands
+      cutlass::layout::RowMajor, /// Layout type for C and D matrix operands
+      float, /// Element type for internal accumulation
+      cutlass::arch::OpClassTensorOp, /// Operator class tag
+      cutlass::arch::Sm80, /// Tag indicating architecture to tune for
+      cutlass::gemm::GemmShape<128, 128, 32>, /// Threadblock-level tile size (concept: GemmShape)
+      cutlass::gemm::GemmShape<64, 64, 32>, /// Warp-level tile size (concept: GemmShape)
+      cutlass::gemm::GemmShape<16, 8, 16>, /// Warp-level tile size (concept: GemmShape)
+      EpilogueOutputOp, /// Epilogue output operator      - must satisfy concept of 'EpilogueWithBroadcastOp' 
+      cutlass::gemm::threadblock::GemmIdentityThreadblockSwizzle<8>, /// Threadblock-level swizzling operator
+      5, /// Number of stages used in the pipelined mainloop
+      cutlass::arch::OpMultiplyAdd /// Operation performed by GEMM
   >::GemmKernel;
 
   using Gemm = cutlass::gemm::device::GemmUniversalAdapter<GemmKernel>;

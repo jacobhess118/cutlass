@@ -68,6 +68,8 @@ struct GemmWithBroadcastReferenceOp {
   using ElementZ = typename OutputOp::ElementZ;
   using ElementT = typename OutputOp::ElementT;
 
+  // NOTE: these two ops are usually defined in the implementation of e.g. `LinearCombinationBiasElementwise`,
+  // and then being passed in via "using EpilogueOutputOp = cutlass::epilogue::thread::LinearCombinationBiasElementwise".
   typename OutputOp::BinaryOp binary_op;
   typename OutputOp::ElementwiseOp elementwise_op;
 
@@ -87,7 +89,7 @@ struct GemmWithBroadcastReferenceOp {
 
 // Fused testbed
 //
-//  Y = GEMM(AB, C)
+//  Y = GEMM(AB, C) = alpha * (A @ B) + beta * C
 //
 //  T[i, j] = ReductionOp(Y[i, j], Broadcast[i])
 //
@@ -113,16 +115,17 @@ struct TestbedGemmWithBroadcast {
   cutlass::Distribution::Kind init_C;
   uint64_t seed;
 
-  cutlass::HostTensor<typename Gemm::ElementA, typename Gemm::LayoutA> tensor_A;          // Input A
-  cutlass::HostTensor<typename Gemm::ElementB, typename Gemm::LayoutB> tensor_B;          // Input B
-  cutlass::HostTensor<ElementC, typename Gemm::LayoutC> tensor_C;                         // Input C
-  cutlass::HostTensor<ElementC, typename Gemm::LayoutC> tensor_Broadcast;                 // Input Broadcast
+  // TODO(jacobhess118): verify hypothesis on meaning of inputs
+  cutlass::HostTensor<typename Gemm::ElementA, typename Gemm::LayoutA> tensor_A;          // Input A  // operand A in GEMM (see formula above)
+  cutlass::HostTensor<typename Gemm::ElementB, typename Gemm::LayoutB> tensor_B;          // Input B  // operand B in GEMM (see formula above)
+  cutlass::HostTensor<ElementC, typename Gemm::LayoutC> tensor_C;                         // Input C  // operand C in GEMM (see formula above)
+  cutlass::HostTensor<ElementC, typename Gemm::LayoutC> tensor_Broadcast;                 // Input Broadcast  // is this the bias tensor?
 
-  cutlass::HostTensor<ElementZ, typename Gemm::LayoutC> tensor_Z;
-  cutlass::HostTensor<ElementT, typename Gemm::LayoutC> tensor_T;
+  cutlass::HostTensor<ElementZ, typename Gemm::LayoutC> tensor_Z;  // output of elementwise at the end
+  cutlass::HostTensor<ElementT, typename Gemm::LayoutC> tensor_T;  // what is a typical reduction op here?
 
   cutlass::HostTensor<ElementAccumulator, typename Gemm::LayoutC> tensor_C_ref;
-  cutlass::HostTensor<ElementAccumulator, typename Gemm::LayoutC> tensor_Y_ref;
+  cutlass::HostTensor<ElementAccumulator, typename Gemm::LayoutC> tensor_Y_ref;  // output of GEMM(AB, C), but what is C?
   cutlass::HostTensor<ElementZ, typename Gemm::LayoutC> tensor_Z_ref;
   cutlass::HostTensor<ElementT, typename Gemm::LayoutC> tensor_T_ref;
 
