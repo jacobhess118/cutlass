@@ -13,6 +13,7 @@ and add:
 Host github-as-jacobhess118
   HostName github.com
   User git
+  UseKeychain yes
   IdentityFile ~/.ssh/id_rsa_jacobhess118
   IdentitiesOnly yes
 ```
