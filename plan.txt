@@ -1,0 +1,9 @@
+# Basic setup commands
+
+git clone git@github-as-jacobhess118:jacobhess118/cutlass.git ~/cutlass_jacobhess118
+
+cd ~/cutlass_jacobhess118
+
+git config user.name 'jacobhess118'
+git config user.email '<jacobhess118@gmail.com>'
+
