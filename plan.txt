@@ -1,5 +1,23 @@
 # Basic setup commands
 
+# In your ~/.ssh/config file, remove:
+```
+Host *
+  IgnoreUnknown UseKeychain
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/id_ed25519
+```
+and add:
+```
+Host github-as-jacobhess118
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_rsa_jacobhess118
+  IdentitiesOnly yes
+```
+
+
 git clone git@github-as-jacobhess118:jacobhess118/cutlass.git ~/cutlass_jacobhess118
 
 cd ~/cutlass_jacobhess118
