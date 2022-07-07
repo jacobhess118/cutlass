@@ -430,7 +430,7 @@ struct TestbedGemmWithBroadcast {
       tensor_C.device_data(),
       tensor_Z.device_data(),
       tensor_Broadcast.device_data(),
-      tensor_T.device_data(),
+      tensor_T.device_data(),  // seems being used in TensorTileIterator (include/cutlass/epilogue/threadblock/default_epilogue_with_broadcast.h)
       problem_size.m() * problem_size.k(),
       problem_size.n() * problem_size.k(),
       problem_size.m() * problem_size.n(),
