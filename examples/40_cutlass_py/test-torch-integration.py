@@ -79,6 +79,8 @@ launch_config = gemm.plan(arguments)
 
 byte_count = gemm.initialize(host_workspace, device_workspace, launch_config, arguments)
 
+print(f"byte_count: {byte_count}")
+
 err = gemm.run(host_workspace, device_workspace, launch_config)
 
 if err != cuda.CUresult.CUDA_SUCCESS:
