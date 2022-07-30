@@ -25,7 +25,7 @@ manifest = cutlass_manifest.Manifest(args=SimpleNamespace(**dict(
 )))
 generator.GenerateSM80_Simt_f32(manifest, None)
 
-operation = manifest.operations_by_name['cutlass_simt_sgemm_256x128_8x5_nt_align1']
+operation = manifest.operations_by_name['cutlass_simt_sgemm_256x128_8x5_nn_align1']
 
 gemm = rt.Gemm(operation)
 
@@ -56,7 +56,7 @@ compilation_options = rt.CompilationOptions(architectures, include_paths)
 
 module = rt.Module('module.cu', [gemm], compilation_options)
 
-M, N, K = (3, 5, 4)
+M, N, K = (300, 500, 400)
 
 tensor_A_torch = torch.empty(M, K, device='cuda', dtype=torch.float32)  # A
 tensor_B_torch = torch.empty(K, N, device='cuda', dtype=torch.float32)  # B
