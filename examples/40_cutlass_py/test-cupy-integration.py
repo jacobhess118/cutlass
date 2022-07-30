@@ -69,10 +69,10 @@ print(f"tensor_A_cupy.data.ptr: {tensor_A_cupy.data.ptr}")
 
 arguments = rt.GemmArguments()
 arguments.problem_size = rt.GemmCoord(M, N, K)
-arguments.A = rt.TensorRef(cuda.CUdeviceptr(tensor_A_cupy.data.ptr), M)
-arguments.B = rt.TensorRef(cuda.CUdeviceptr(tensor_B_cupy.data.ptr), N)
-arguments.C = rt.TensorRef(cuda.CUdeviceptr(tensor_C_cupy.data.ptr), M)
-arguments.D = rt.TensorRef(cuda.CUdeviceptr(tensor_D_cupy.data.ptr), M)
+arguments.A = rt.TensorRef(cuda.CUdeviceptr(c_void_p(tensor_A_cupy.data.ptr)), M)
+arguments.B = rt.TensorRef(cuda.CUdeviceptr(c_void_p(tensor_B_cupy.data.ptr)), N)
+arguments.C = rt.TensorRef(cuda.CUdeviceptr(c_void_p(tensor_C_cupy.data.ptr)), M)
+arguments.D = rt.TensorRef(cuda.CUdeviceptr(c_void_p(tensor_D_cupy.data.ptr)), M)
 
 host_workspace = bytearray(gemm.get_host_workspace_size(arguments))
 device_workspace = None
