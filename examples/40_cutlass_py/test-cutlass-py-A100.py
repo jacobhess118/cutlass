@@ -99,10 +99,10 @@ module = rt.Module('module.cu', [gemm], compilation_options)
 
 M, N, K = (128, 128, 128)
 
-tensor_A = np.ndarray(M * K, dtype=np.float32)
-tensor_B = np.ndarray(N * K, dtype=np.float32)
-tensor_C = np.ndarray(M * N, dtype=np.float32)
-tensor_D = np.ndarray(M * N, dtype=np.float32)
+tensor_A = torch.empty(M * K, dtype=torch.float)
+tensor_B = torch.empty(N * K, dtype=torch.float)
+tensor_C = torch.empty(M * N, dtype=torch.float)
+tensor_D = torch.empty(M * N, dtype=torch.float)
 
 err, tensor_A_d = cuda.cuMemAlloc(tensor_A.size * tensor_A.itemsize)
 if err != cuda.CUresult.CUDA_SUCCESS:
