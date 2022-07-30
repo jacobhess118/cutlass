@@ -61,7 +61,8 @@ M, N, K = (300, 500, 400)
 tensor_A_torch = torch.empty(M, K, device='cuda', dtype=torch.float32)  # A
 tensor_B_torch = torch.empty(K, N, device='cuda', dtype=torch.float32)  # B
 tensor_C_torch = torch.empty(M, N, device='cuda', dtype=torch.float32)  # C
-tensor_D_torch = tensor_C_torch
+# tensor_D_torch = tensor_C_torch
+tensor_D_torch = torch.empty(M, N, device='cuda', dtype=torch.float32)  # D
 
 arguments = rt.GemmArguments()
 arguments.problem_size = rt.GemmCoord(M, N, K)
