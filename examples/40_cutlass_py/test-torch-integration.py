@@ -92,10 +92,10 @@ arguments = rt.GemmArguments()
 M, N, K = (3, 5, 4)
 arguments.problem_size = rt.GemmCoord(M, N, K)
 
-tensor_A_torch = torch.empty(3, 4, device='cuda')  # a
-tensor_B_torch = torch.empty(4, 5, device='cuda')  # b
-tensor_C_torch = torch.empty(3, 5, device='cuda')  # c
-tensor_D_torch = torch.empty(3, 5, device='cuda')  # c
+tensor_A_torch = torch.empty(3, 4, device='cuda', dtype=torch.float32)  # a
+tensor_B_torch = torch.empty(4, 5, device='cuda', dtype=torch.float32)  # b
+tensor_C_torch = torch.empty(3, 5, device='cuda', dtype=torch.float32)  # c
+tensor_D_torch = tensor_C_torch
 
 arguments.A = rt.TensorRef(cuda.CUdeviceptr(tensor_A_torch.data_ptr()), M)
 arguments.B = rt.TensorRef(cuda.CUdeviceptr(tensor_B_torch.data_ptr()), N)
