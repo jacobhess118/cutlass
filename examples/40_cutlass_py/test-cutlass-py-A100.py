@@ -9,6 +9,7 @@ import numpy as np
 import os.path
 import sys
 import ctypes
+import namedtuple
 
 # CUDA Python modules
 from cuda import cuda
