@@ -21,7 +21,7 @@ import generator
 import rt
 
 
-cuda_ver = sys.argv[1]
+cuda_ver = sys.argv[2]
 
 #
 # Construct an SGEMM
