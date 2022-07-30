@@ -27,7 +27,7 @@ cuda_ver = sys.argv[1]
 # Construct an SGEMM
 #
 
-manifest = cutlass_manifest.Manifest(args=dict(
+args = dict(
   curr_build_dir=".",  # CUTLASS current build directory. cmake files will be emitted in this directory
   generator_target="library",  # Target of CUTLASS Library Generator
   architectures="80",  # Target compute architectures, can be 53;60;61;70;75;80
@@ -35,7 +35,9 @@ manifest = cutlass_manifest.Manifest(args=dict(
   ignore_kernels="",  # Comma delimited list of kernels to exclude from build
   filter_by_cc="True",  # If enabled, kernels whose comupte capability range is not satisfied by the build target are excluded
   cuda_version=cuda_ver,  # Semantic version string of CUDA Toolkit
-))
+)
+print(args)
+manifest = cutlass_manifest.Manifest(args=args)
 
 generator.GenerateSM80_Simt_f32(manifest, None)
 
