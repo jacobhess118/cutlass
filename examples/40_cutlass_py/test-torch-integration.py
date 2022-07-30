@@ -73,8 +73,8 @@ if err != cuda.CUresult.CUDA_SUCCESS:
 
 architectures = [int(cuda_arch),]
 include_paths = [
-  f'../../cutlass/include',
-  f'../../cutlass/tools/util/include',
+  f'../../../cutlass/include',
+  f'../../../cutlass/tools/util/include',
   f'/usr/local/cuda-{cuda_ver}/include',
   f'/usr/local/cuda-{cuda_ver}/targets/x86_64-linux/include',
 ]
