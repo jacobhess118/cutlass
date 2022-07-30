@@ -23,6 +23,7 @@ import rt
 
 
 cuda_ver = sys.argv[1]
+cuda_arch = "80"  # assuming A100
 
 #
 # Construct an SGEMM
@@ -33,7 +34,7 @@ manifest = cutlass_manifest.Manifest(args=SimpleNamespace(**dict(
   build_dir=".",  # CUTLASS top-level build directory
   curr_build_dir=".",  # CUTLASS current build directory. cmake files will be emitted in this directory
   generator_target="library",  # Target of CUTLASS Library Generator
-  architectures="80",  # Target compute architectures, can be 53;60;61;70;75;80
+  architectures=cuda_arch,  # Target compute architectures, can be 53;60;61;70;75;80
   kernels="",  # Comma delimited list to filter kernels by name
   ignore_kernels="",  # Comma delimited list of kernels to exclude from build
   filter_by_cc="True",  # If enabled, kernels whose comupte capability range is not satisfied by the build target are excluded
@@ -45,11 +46,11 @@ manifest = cutlass_manifest.Manifest(args=SimpleNamespace(**dict(
 generator.GenerateSM80_Simt_f32(manifest, None)
 
 #
-# Construct a GEMM operation
+# Look up the GEMM operation
 #
 
-# List all operations
-print(f"manifest.operations_by_name: {manifest.operations_by_name}")
+# # List all operations available
+# print(f"manifest.operations_by_name: {manifest.operations_by_name}")
 
 operation = manifest.operations_by_name['cutlass_simt_sgemm_256x128_8x5_nt_align1']
 
@@ -80,7 +81,7 @@ if err != cuda.CUresult.CUDA_SUCCESS:
 # Construct a module
 #
 
-architectures = [80,]
+architectures = [int(cuda_arch),]
 include_paths = [
   '../../include',
   '../../tools/util/include',
