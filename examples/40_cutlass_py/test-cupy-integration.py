@@ -1,3 +1,4 @@
+from ctypes import c_void_p
 from types import SimpleNamespace
 from cuda import cuda
 import library
