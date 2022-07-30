@@ -35,6 +35,9 @@ generator.GenerateSM80_Simt_f32(manifest, cuda_ver)
 # Construct a GEMM operation
 #
 
+# List all operations
+print(f"manifest.operations_by_name: {manifest.operations_by_name}")
+
 operation = manifest.operations_by_name['cutlass_simt_sgemm_128x128_8x2_nt_align1']
 
 #

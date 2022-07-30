@@ -235,8 +235,6 @@ class Manifest:
       else:
           self.kernel_filter_list = self.get_kernel_filters(args.kernel_filter_file)
 
-    print(f"self.curr_build_dir: {self.curr_build_dir}")
-
   #
   def get_kernel_filters (self, kernelListFile):
     if os.path.isfile(kernelListFile):
