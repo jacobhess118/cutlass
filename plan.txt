@@ -26,3 +26,30 @@ cd ~/cutlass_jacobhess118
 git config user.name 'jacobhess118'
 git config user.email '<jacobhess118@gmail.com>'
 
+
+======
+
+# Set up environment
+conda activate torch_nightly_cuda
+export MODULEPATH=/data/shared/modulefiles:$MODULEPATH
+module unload cuda
+module unload nccl
+module unload nccl_efa
+module load cuda/11.4 nccl/2.12.7-cuda.11.4 nccl_efa/1.2.0-nccl.2.12.7-cuda.11.4
+source /data/shared/bin/cluster_env_new.sh
+export CUDA_HOME=/usr/local/cuda-11.4
+export CUDA_INSTALL_PATH=/usr/local/cuda-11.4
+export NCCL_INCLUDE_DIR=/usr/local/cuda-11.4/include
+export CUDACXX=${CUDA_INSTALL_PATH}/bin/nvcc
+pip install cuda-python  # install CUDA Python
+
+# Install CUTLASS
+cd /fsx/users/${USER}/cutlass
+mkdir build && cd build
+cmake .. -DCUTLASS_NVCC_ARCHS=80               # compiles for NVIDIA Ampere GPU architecture
+
+# Run CUTLASS examples
+export PYTHONPATH=/fsx/users/${USER}/cutlass/tools/library/scripts:$PYTHONPATH
+cd examples/40_cutlass_py
+python test-cutlass-py.py 
+

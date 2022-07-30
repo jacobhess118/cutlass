@@ -61,6 +61,8 @@ architectures = [80,]
 include_paths = [
   '../../include',
   '../../tools/util/include',
+  '/usr/local/cuda-11.4/include',
+  '/usr/local/cuda-11.4/targets/x86_64-linux/include',
 ]
 
 compilation_options = rt.CompilationOptions(architectures, include_paths)
