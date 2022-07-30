@@ -101,26 +101,25 @@ module = rt.Module('module.cu', [gemm], compilation_options)
 
 M, N, K = (128, 128, 128)
 
-tensor_A = torch.empty(M * K, dtype=torch.float)
-tensor_B = torch.empty(N * K, dtype=torch.float)
-tensor_C = torch.empty(M * N, dtype=torch.float)
-tensor_D = torch.empty(M * N, dtype=torch.float)
+# TODO(yf225): figure out how to pass CUDA tensor pointer directly from PyTorch to CUTLASS-Python, to avoid allocating mem on host.
+tensor_A = torch.empty(M * K, dtype=torch.float).numpy()
+tensor_B = torch.empty(N * K, dtype=torch.float).numpy()
+tensor_C = torch.empty(M * N, dtype=torch.float).numpy()
+tensor_D = torch.empty(M * N, dtype=torch.float).numpy()
 
-itemsize = 4  # float32
-
-err, tensor_A_d = cuda.cuMemAlloc(tensor_A.numel() * itemsize)
+err, tensor_A_d = cuda.cuMemAlloc(tensor_A.size * tensor_A.itemsize)
 if err != cuda.CUresult.CUDA_SUCCESS:
   raise RuntimeError("CUDA Error %s" % str(err))
 
-err, tensor_B_d = cuda.cuMemAlloc(tensor_B.numel() * itemsize)
+err, tensor_B_d = cuda.cuMemAlloc(tensor_B.size * tensor_B.itemsize)
 if err != cuda.CUresult.CUDA_SUCCESS:
   raise RuntimeError("CUDA Error %s" % str(err))
 
-err, tensor_C_d = cuda.cuMemAlloc(tensor_C.numel() * itemsize)
+err, tensor_C_d = cuda.cuMemAlloc(tensor_C.size * tensor_C.itemsize)
 if err != cuda.CUresult.CUDA_SUCCESS:
   raise RuntimeError("CUDA Error %s" % str(err))
 
-err, tensor_D_d = cuda.cuMemAlloc(tensor_D.numel() * itemsize)
+err, tensor_D_d = cuda.cuMemAlloc(tensor_D.size * tensor_D.itemsize)
 if err != cuda.CUresult.CUDA_SUCCESS:
   raise RuntimeError("CUDA Error %s" % str(err))
 
@@ -136,8 +135,8 @@ tensors = [
 ]
 
 for tensor_device, tensor_host in tensors:
-  bytes = tensor_host.numel() * itemsize
-  print("Tensor has dimensions: %s (%d bytes)" % (str(tensor_host.numel()), itemsize))
+  bytes = tensor_host.size * tensor_host.itemsize
+  print("Tensor has dimensions: %s (%d bytes)" % (str(tensor_host.size), tensor_host.itemsize))
   err, = cuda.cuMemcpyHtoDAsync(tensor_device, tensor_host, bytes, stream)
   print("updating tensor in device memory ", hex(int(tensor_device)))
   if err != cuda.CUresult.CUDA_SUCCESS:
