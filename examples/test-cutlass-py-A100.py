@@ -1,3 +1,8 @@
+"""
+export CUDA_VER=11.4
+python test-cutlass-py.py ${CUDA_VER}
+"""
+
 
 # System modules
 import numpy as np
@@ -16,13 +21,15 @@ import generator
 import rt
 
 
+cuda_ver = sys.argv[1]
+
 #
 # Construct an SGEMM
 #
 
 manifest = cutlass_manifest.Manifest()
 
-generator.GenerateSM50_Simt(manifest, "11.5.0")
+generator.GenerateSM80_Simt_f32(manifest, cuda_ver)
 
 #
 # Construct a GEMM operation
@@ -61,6 +68,8 @@ architectures = [80,]
 include_paths = [
   '../../include',
   '../../tools/util/include',
+  f'/usr/local/cuda-{cuda_ver}/include',
+  f'/usr/local/cuda-{cuda_ver}/targets/x86_64-linux/include',
 ]
 
 compilation_options = rt.CompilationOptions(architectures, include_paths)
