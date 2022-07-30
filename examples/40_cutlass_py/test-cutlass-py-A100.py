@@ -29,7 +29,7 @@ cuda_ver = sys.argv[1]
 
 manifest = cutlass_manifest.Manifest()
 
-generator.GenerateSM50_Simt(manifest, "11.4.0")
+generator.GenerateSM80_Simt_f32(manifest, "11.4.0")
 
 #
 # Construct a GEMM operation

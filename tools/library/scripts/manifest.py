@@ -324,7 +324,7 @@ class Manifest:
 
       operation_kind -> configuration_name -> []
     '''
-
+    print(f"operation: {operation}")
     if self.filter(operation):
     
       self.selected_kernels.append(operation.procedural_name())
