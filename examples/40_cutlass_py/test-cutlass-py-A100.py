@@ -21,6 +21,8 @@ import manifest as cutlass_manifest
 import generator
 import rt
 
+import torch
+
 
 cuda_ver = sys.argv[1]
 cuda_arch = "80"  # assuming A100
