@@ -1,6 +1,6 @@
 """
 export CUDA_VER=11.4
-python test-cutlass-py.py ${CUDA_VER}
+python test-cutlass-py-A100.py ${CUDA_VER}
 """
 
 
@@ -21,7 +21,7 @@ import generator
 import rt
 
 
-cuda_ver = sys.argv[2]
+cuda_ver = sys.argv[1]
 
 #
 # Construct an SGEMM
