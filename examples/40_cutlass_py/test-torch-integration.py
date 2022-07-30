@@ -89,6 +89,7 @@ module = rt.Module('module.cu', [gemm], compilation_options)
 
 arguments = rt.GemmArguments()
 
+M, N, K = (3, 5, 4)
 arguments.problem_size = rt.GemmCoord(M, N, K)
 
 tensor_A_torch = torch.empty(3, 4, device='cuda'),  # a
