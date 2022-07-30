@@ -62,7 +62,7 @@ if err != cuda.CUresult.CUDA_SUCCESS:
 # Construct a module
 #
 
-cuda_install_path = sys.argv[1]
+cuda_install_path = sys.argv[2]
 architectures = [80,]
 include_paths = [
   '../../include',
