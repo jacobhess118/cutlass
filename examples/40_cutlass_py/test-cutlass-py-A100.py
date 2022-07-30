@@ -106,19 +106,21 @@ tensor_B = torch.empty(N * K, dtype=torch.float)
 tensor_C = torch.empty(M * N, dtype=torch.float)
 tensor_D = torch.empty(M * N, dtype=torch.float)
 
-err, tensor_A_d = cuda.cuMemAlloc(tensor_A.size * tensor_A.itemsize)
+itemsize = 4  # float32
+
+err, tensor_A_d = cuda.cuMemAlloc(tensor_A.numel() * itemsize)
 if err != cuda.CUresult.CUDA_SUCCESS:
   raise RuntimeError("CUDA Error %s" % str(err))
 
-err, tensor_B_d = cuda.cuMemAlloc(tensor_B.size * tensor_B.itemsize)
+err, tensor_B_d = cuda.cuMemAlloc(tensor_B.numel() * itemsize)
 if err != cuda.CUresult.CUDA_SUCCESS:
   raise RuntimeError("CUDA Error %s" % str(err))
 
-err, tensor_C_d = cuda.cuMemAlloc(tensor_C.size * tensor_C.itemsize)
+err, tensor_C_d = cuda.cuMemAlloc(tensor_C.numel() * itemsize)
 if err != cuda.CUresult.CUDA_SUCCESS:
   raise RuntimeError("CUDA Error %s" % str(err))
 
-err, tensor_D_d = cuda.cuMemAlloc(tensor_D.size * tensor_D.itemsize)
+err, tensor_D_d = cuda.cuMemAlloc(tensor_D.numel() * itemsize)
 if err != cuda.CUresult.CUDA_SUCCESS:
   raise RuntimeError("CUDA Error %s" % str(err))
 
@@ -134,8 +136,8 @@ tensors = [
 ]
 
 for tensor_device, tensor_host in tensors:
-  bytes = tensor_host.size * tensor_host.itemsize
-  print("Tensor has dimensions: %s (%d bytes)" % (str(tensor_host.size), tensor_host.itemsize))
+  bytes = tensor_host.numel() * itemsize
+  print("Tensor has dimensions: %s (%d bytes)" % (str(tensor_host.numel()), itemsize))
   err, = cuda.cuMemcpyHtoDAsync(tensor_device, tensor_host, bytes, stream)
   print("updating tensor in device memory ", hex(int(tensor_device)))
   if err != cuda.CUresult.CUDA_SUCCESS:
