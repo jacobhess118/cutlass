@@ -1,3 +1,8 @@
+"""
+export CUDA_INSTALL_PATH=/usr/local/cuda-11.4
+python test-cutlass-py.py ${CUDA_INSTALL_PATH}
+"""
+
 
 # System modules
 import numpy as np
@@ -57,12 +62,13 @@ if err != cuda.CUresult.CUDA_SUCCESS:
 # Construct a module
 #
 
+cuda_install_path = sys.argv[2]
 architectures = [80,]
 include_paths = [
   '../../include',
   '../../tools/util/include',
-  '/usr/local/cuda-11.4/include',
-  '/usr/local/cuda-11.4/targets/x86_64-linux/include',
+  f'{cuda_install_path}/include',
+  f'{cuda_install_path}/targets/x86_64-linux/include',
 ]
 
 compilation_options = rt.CompilationOptions(architectures, include_paths)
