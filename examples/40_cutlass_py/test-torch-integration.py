@@ -1,5 +1,6 @@
 import torch
 from types import SimpleNamespace
+from ctypes import c_void_p
 from cuda import cuda
 import library
 import manifest as cutlass_manifest
@@ -66,10 +67,10 @@ tensor_D_torch = torch.empty(M, N, device='cuda', dtype=torch.float32)  # D
 
 arguments = rt.GemmArguments()
 arguments.problem_size = rt.GemmCoord(M, N, K)
-arguments.A = rt.TensorRef(tensor_A_torch.data_ptr(), tensor_A_torch.stride()[0])
-arguments.B = rt.TensorRef(tensor_B_torch.data_ptr(), tensor_B_torch.stride()[0])
-arguments.C = rt.TensorRef(tensor_C_torch.data_ptr(), tensor_C_torch.stride()[0])
-arguments.D = rt.TensorRef(tensor_D_torch.data_ptr(), tensor_D_torch.stride()[0])
+arguments.A = rt.TensorRef(c_void_p(tensor_A_torch.data_ptr()), tensor_A_torch.stride()[0])
+arguments.B = rt.TensorRef(c_void_p(tensor_B_torch.data_ptr()), tensor_B_torch.stride()[0])
+arguments.C = rt.TensorRef(c_void_p(tensor_C_torch.data_ptr()), tensor_C_torch.stride()[0])
+arguments.D = rt.TensorRef(c_void_p(tensor_D_torch.data_ptr()), tensor_D_torch.stride()[0])
 
 host_workspace = bytearray(gemm.get_host_workspace_size(arguments))
 device_workspace = None
