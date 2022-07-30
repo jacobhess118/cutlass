@@ -9,7 +9,7 @@ import numpy as np
 import os.path
 import sys
 import ctypes
-from collections import namedtuple
+from types import SimpleNamespace
 
 # CUDA Python modules
 from cuda import cuda
@@ -28,7 +28,7 @@ cuda_ver = sys.argv[1]
 # Construct an SGEMM
 #
 
-manifest = cutlass_manifest.Manifest(args=namedtuple("args", dict(
+manifest = cutlass_manifest.Manifest(args=SimpleNamespace(**dict(
   curr_build_dir=".",  # CUTLASS current build directory. cmake files will be emitted in this directory
   generator_target="library",  # Target of CUTLASS Library Generator
   architectures="80",  # Target compute architectures, can be 53;60;61;70;75;80
