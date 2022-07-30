@@ -64,7 +64,7 @@ tensor_C_cupy = cupy.ndarray(M * N, dtype=cupy.float32)
 tensor_D_cupy = cupy.ndarray(M * N, dtype=cupy.float32)
 
 print(f"tensor_A_cupy: {tensor_A_cupy}")
-print(f"tensor_A_cupy.device: {tensor_A_cupy}.device")
+print(f"tensor_A_cupy.device: {tensor_A_cupy.device}")
 
 arguments = rt.GemmArguments()
 arguments.problem_size = rt.GemmCoord(M, N, K)
