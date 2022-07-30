@@ -29,7 +29,7 @@ cuda_ver = sys.argv[1]
 
 manifest = cutlass_manifest.Manifest(args=dict(
   curr_build_dir=".",  # CUTLASS current build directory. cmake files will be emitted in this directory
-  generator_target="library"  # Target of CUTLASS Library Generator
+  generator_target="library",  # Target of CUTLASS Library Generator
   architectures="80",  # Target compute architectures, can be 53;60;61;70;75;80
   kernels="",  # Comma delimited list to filter kernels by name
   ignore_kernels="",  # Comma delimited list of kernels to exclude from build
