@@ -66,10 +66,10 @@ tensor_D_torch = torch.empty(M, N, device='cuda', dtype=torch.float32)  # D
 
 arguments = rt.GemmArguments()
 arguments.problem_size = rt.GemmCoord(M, N, K)
-arguments.A = rt.TensorRef(tensor_A_torch.data_ptr(), M)
-arguments.B = rt.TensorRef(tensor_B_torch.data_ptr(), N)
-arguments.C = rt.TensorRef(tensor_C_torch.data_ptr(), M)
-arguments.D = rt.TensorRef(tensor_D_torch.data_ptr(), M)
+arguments.A = rt.TensorRef(tensor_A_torch.data_ptr(), tensor_A_torch.stride[0])
+arguments.B = rt.TensorRef(tensor_B_torch.data_ptr(), tensor_B_torch.stride[0])
+arguments.C = rt.TensorRef(tensor_C_torch.data_ptr(), tensor_C_torch.stride[0])
+arguments.D = rt.TensorRef(tensor_D_torch.data_ptr(), tensor_D_torch.stride[0])
 
 host_workspace = bytearray(gemm.get_host_workspace_size(arguments))
 device_workspace = None
