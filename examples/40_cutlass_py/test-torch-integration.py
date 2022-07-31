@@ -30,7 +30,7 @@ manifest = cutlass_manifest.Manifest()
 generator.GenerateSM50_Simt(manifest, cuda_ver)
 
 # operation = manifest.operations_by_name['cutlass_simt_sgemm_256x128_8x5_nt_align1']
-operation = manifest.operations_by_name['cutlass_simt_sgemm_128x128_8x2_nt_align1']
+operation = manifest.operations_by_name['cutlass_simt_sgemm_128x128_8x2_nn_align1']
 
 gemm = rt.Gemm(operation)
 
