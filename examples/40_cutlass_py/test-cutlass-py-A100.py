@@ -52,7 +52,7 @@ generator.GenerateSM50_Simt(manifest, cuda_ver)  # TODO: figure out why Generate
 # # List all operations available
 # print(f"manifest.operations_by_name: {manifest.operations_by_name}")
 
-operation = manifest.operations_by_name['cutlass_simt_sgemm_256x128_8x5_nt_align1']
+operation = manifest.operations_by_name['cutlass_simt_sgemm_128x128_8x2_nt_align1']
 
 #
 # Construct a runtime GEMM operation
