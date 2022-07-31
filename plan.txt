@@ -52,5 +52,5 @@ cmake .. -DCUTLASS_NVCC_ARCHS=80               # compiles for NVIDIA Ampere GPU 
 # Run CUTLASS examples
 export PYTHONPATH=/fsx/users/${USER}/cutlass/tools/library/scripts:$PYTHONPATH
 cd examples/40_cutlass_py
-python test-cutlass-py-A100.py ${CUDA_VER}
+CUDA_LAUNCH_BLOCKING=1 python test-torch-integration.py
 
