@@ -65,9 +65,9 @@ M, N, K = (3, 4, 5)
 
 # Formula: D = alpha * (A @ B) + beta * C
 
-tensor_A_torch = torch.randn(M, K, device='cuda', dtype=torch.float32)  # A
-tensor_B_torch = torch.randn(K, N, device='cuda', dtype=torch.float32)  # B
-tensor_C_torch = torch.randn(M, N, device='cuda', dtype=torch.float32)  # C
+tensor_A_torch = torch.arange(M*K, device='cuda', dtype=torch.float32).view(M, K)  # A
+tensor_B_torch = torch.arange(K*N, device='cuda', dtype=torch.float32).view(K, N)  # B
+tensor_C_torch = torch.arange(M*N, device='cuda', dtype=torch.float32).view(M, N)  # C
 tensor_D_torch = torch.empty(M, N, device='cuda', dtype=torch.float32)  # D
 
 pt_result = tensor_A_torch @ tensor_B_torch + tensor_C_torch
