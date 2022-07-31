@@ -22,7 +22,7 @@ import rt
 
 manifest = cutlass_manifest.Manifest()
 
-generator.GenerateSM50_Simt(manifest, "11.5.0")
+generator.GenerateSM50_Simt(manifest, "11.4.0")
 
 #
 # Construct a GEMM operation
@@ -57,7 +57,7 @@ if err != cuda.CUresult.CUDA_SUCCESS:
 # Construct a module
 #
 
-architectures = [50,]
+architectures = [80,]
 include_paths = [
   '../../include',
   '../../tools/util/include',
