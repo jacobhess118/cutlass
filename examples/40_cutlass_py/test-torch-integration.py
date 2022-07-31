@@ -132,5 +132,6 @@ err = gemm.run(host_workspace, device_workspace, launch_config)
 if err != cuda.CUresult.CUDA_SUCCESS:
   raise RuntimeError('CUDA Error %s' % str(err))
 
+torch.cuda.synchronize()
 print(f"tensor_C_torch: {tensor_C_torch}")
 print(f"tensor_D_torch: {tensor_D_torch}")
