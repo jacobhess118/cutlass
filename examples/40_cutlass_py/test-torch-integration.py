@@ -11,23 +11,26 @@ import rt
 cuda_ver = "11.4"
 cuda_arch = "80"  # assuming A100
 
-manifest = cutlass_manifest.Manifest(args=SimpleNamespace(**dict(
-  operations="all",
-  build_dir=".",
-  curr_build_dir=".",
-  generator_target="library",
-  architectures=cuda_arch,
-  kernels="",
-  ignore_kernels="",
-  filter_by_cc="True",
-  cuda_version=cuda_ver,
-  kernel_filter_file=None,
-  selected_kernel_list=None,
-  interface_dir=None,
-)))
-generator.GenerateSM80_Simt_f32(manifest, None)
+# manifest = cutlass_manifest.Manifest(args=SimpleNamespace(**dict(
+#   operations="all",
+#   build_dir=".",
+#   curr_build_dir=".",
+#   generator_target="library",
+#   architectures=cuda_arch,
+#   kernels="",
+#   ignore_kernels="",
+#   filter_by_cc="True",
+#   cuda_version=cuda_ver,
+#   kernel_filter_file=None,
+#   selected_kernel_list=None,
+#   interface_dir=None,
+# )))
+# generator.GenerateSM80_Simt_f32(manifest, None)
+manifest = cutlass_manifest.Manifest()
+generator.GenerateSM50_Simt(manifest, cuda_ver)
 
-operation = manifest.operations_by_name['cutlass_simt_sgemm_256x128_8x5_nt_align1']
+# operation = manifest.operations_by_name['cutlass_simt_sgemm_256x128_8x5_nt_align1']
+operation = manifest.operations_by_name['cutlass_simt_sgemm_128x128_8x2_nt_align1']
 
 gemm = rt.Gemm(operation)
 
