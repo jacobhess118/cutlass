@@ -132,6 +132,25 @@ err = gemm.run(host_workspace, device_workspace, launch_config)
 if err != cuda.CUresult.CUDA_SUCCESS:
   raise RuntimeError('CUDA Error %s' % str(err))
 
-torch.cuda.synchronize()
+#
+# Debug reporting of byte array contents
+#
+
+def PrintBytearray(host_workspace):
+  uint_str = None
+  prefix = None
+  print("uint32_t host_workspace[] = {")
+  for idx, byte in enumerate(host_workspace):
+    if not (idx % 4):
+      if uint_str is not None:
+        print(prefix, uint_str, ",")
+      prefix = "/* offset: %d B */    0x" % idx
+      uint_str = ""
+    uint_str = "{:02x}".format(byte) + uint_str
+  print("};")
+
+PrintBytearray(host_workspace)
+
+# torch.cuda.synchronize()
 # print(f"tensor_C_torch: {tensor_C_torch}")
 # print(f"tensor_D_torch: {tensor_D_torch}")
