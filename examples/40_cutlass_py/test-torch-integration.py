@@ -154,6 +154,6 @@ def PrintBytearray(host_workspace):
 
 PrintBytearray(host_workspace)
 
-# torch.cuda.synchronize()
+torch.cuda.synchronize()
 # print(f"tensor_C_torch: {tensor_C_torch}")
 # print(f"tensor_D_torch: {tensor_D_torch}")
