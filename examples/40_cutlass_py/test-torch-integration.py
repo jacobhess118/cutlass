@@ -61,7 +61,7 @@ compilation_options = rt.CompilationOptions(architectures, include_paths)
 
 module = rt.Module('module.cu', [gemm], compilation_options)
 
-M, N, K = (512, 512, 512)
+M, N, K = (128, 256, 512)
 
 # Formula: D = alpha * (A @ B) + beta * C
 
