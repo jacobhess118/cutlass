@@ -42,8 +42,10 @@ cuda_arch = "80"  # assuming A100
 #   selected_kernel_list=None,  # Specify the output log file containing all enabled kernels in this build
 #   interface_dir=None,  # Interface header to kernels
 # )))
+# generator.GenerateSM80_Simt_f32(manifest, None)  # TODO: figure out why this doesn't work
+
 manifest = cutlass_manifest.Manifest()
-generator.GenerateSM50_Simt(manifest, cuda_ver)  # TODO: figure out why GenerateSM80 doesn't work
+generator.GenerateSM50_Simt(manifest, cuda_ver)
 
 #
 # Look up the GEMM operation
