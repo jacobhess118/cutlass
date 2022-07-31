@@ -58,7 +58,7 @@ compilation_options = rt.CompilationOptions(architectures, include_paths)
 
 module = rt.Module('module.cu', [gemm], compilation_options)
 
-M, N, K = (128, 512, 256)
+M, N, K = (512, 512, 512)
 
 # tensor_A_torch = torch.empty(M, K, device='cuda', dtype=torch.float32)  # A
 # tensor_B_torch = torch.empty(K, N, device='cuda', dtype=torch.float32)  # B
