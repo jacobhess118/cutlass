@@ -57,7 +57,7 @@ if err != cuda.CUresult.CUDA_SUCCESS:
 # Construct a module
 #
 
-architectures = [80,]
+architectures = [50,]
 include_paths = [
   '../../include',
   '../../tools/util/include',
