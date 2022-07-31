@@ -70,6 +70,8 @@ tensor_B_torch = torch.randn(K, N, device='cuda', dtype=torch.float32)  # B
 tensor_C_torch = torch.randn(M, N, device='cuda', dtype=torch.float32)  # C
 tensor_D_torch = torch.empty(M, N, device='cuda', dtype=torch.float32)  # D
 
+pt_result = tensor_A_torch @ tensor_B_torch + tensor_C_torch
+
 print(f"tensor_A_torch: {tensor_A_torch}")
 print(f"tensor_B_torch: {tensor_B_torch}")
 print(f"tensor_C_torch: {tensor_C_torch}")
@@ -114,8 +116,6 @@ if err != cuda.CUresult.CUDA_SUCCESS:
 
 torch.cuda.synchronize()
 print(f"tensor_D_torch: {tensor_D_torch}")
-
-pt_result = tensor_A_torch @ tensor_B_torch + tensor_C_torch
 print(f"PyTorch result: {pt_result}")
 
 assert torch.allclose(tensor_D_torch, pt_result)
