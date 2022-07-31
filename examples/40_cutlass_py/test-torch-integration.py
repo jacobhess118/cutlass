@@ -60,11 +60,11 @@ module = rt.Module('module.cu', [gemm], compilation_options)
 
 M, N, K = (128, 512, 256)
 
-# tensor_A_torch = torch.empty(M, K, device='cuda', dtype=torch.float32)  # A
-# tensor_B_torch = torch.empty(K, N, device='cuda', dtype=torch.float32)  # B
-# tensor_C_torch = torch.empty(M, N, device='cuda', dtype=torch.float32)  # C
-# # tensor_D_torch = tensor_C_torch
-# tensor_D_torch = torch.empty(M, N, device='cuda', dtype=torch.float32)  # D
+tensor_A_torch = torch.empty(M, K, device='cuda', dtype=torch.float32)  # A
+tensor_B_torch = torch.empty(K, N, device='cuda', dtype=torch.float32)  # B
+tensor_C_torch = torch.empty(M, N, device='cuda', dtype=torch.float32)  # C
+# tensor_D_torch = tensor_C_torch
+tensor_D_torch = torch.empty(M, N, device='cuda', dtype=torch.float32)  # D
 
 # ======
 tensor_A = np.ndarray(M * K, dtype=np.float32)
