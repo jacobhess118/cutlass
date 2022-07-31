@@ -139,20 +139,20 @@ if err != cuda.CUresult.CUDA_SUCCESS:
 # Debug reporting of byte array contents
 #
 
-def PrintBytearray(host_workspace):
-  uint_str = None
-  prefix = None
-  print("uint32_t host_workspace[] = {")
-  for idx, byte in enumerate(host_workspace):
-    if not (idx % 4):
-      if uint_str is not None:
-        print(prefix, uint_str, ",")
-      prefix = "/* offset: %d B */    0x" % idx
-      uint_str = ""
-    uint_str = "{:02x}".format(byte) + uint_str
-  print("};")
+# def PrintBytearray(host_workspace):
+#   uint_str = None
+#   prefix = None
+#   print("uint32_t host_workspace[] = {")
+#   for idx, byte in enumerate(host_workspace):
+#     if not (idx % 4):
+#       if uint_str is not None:
+#         print(prefix, uint_str, ",")
+#       prefix = "/* offset: %d B */    0x" % idx
+#       uint_str = ""
+#     uint_str = "{:02x}".format(byte) + uint_str
+#   print("};")
 
-PrintBytearray(host_workspace)
+# PrintBytearray(host_workspace)
 
 torch.cuda.synchronize()
 print(f"tensor_C_torch: {tensor_C_torch}")
