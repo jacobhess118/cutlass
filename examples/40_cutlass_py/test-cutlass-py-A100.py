@@ -1,6 +1,5 @@
 """
-export CUDA_VER=11.4
-python test-cutlass-py-A100.py ${CUDA_VER}
+python test-cutlass-py-A100.py
 """
 
 
@@ -21,10 +20,8 @@ import manifest as cutlass_manifest
 import generator
 import rt
 
-import torch
 
-
-cuda_ver = sys.argv[1]
+cuda_ver = "11.4"
 cuda_arch = "80"  # assuming A100
 
 #
@@ -101,11 +98,10 @@ module = rt.Module('module.cu', [gemm], compilation_options)
 
 M, N, K = (128, 128, 128)
 
-# TODO(yf225): figure out how to pass CUDA tensor pointer directly from PyTorch to CUTLASS-Python, to avoid allocating mem on host.
-tensor_A = torch.empty(M * K, dtype=torch.float).numpy()
-tensor_B = torch.empty(N * K, dtype=torch.float).numpy()
-tensor_C = torch.empty(M * N, dtype=torch.float).numpy()
-tensor_D = torch.empty(M * N, dtype=torch.float).numpy()
+tensor_A = np.ndarray(M * K, dtype=np.float32)
+tensor_B = np.ndarray(N * K, dtype=np.float32)
+tensor_C = np.ndarray(M * N, dtype=np.float32)
+tensor_D = np.ndarray(M * N, dtype=np.float32)
 
 err, tensor_A_d = cuda.cuMemAlloc(tensor_A.size * tensor_A.itemsize)
 if err != cuda.CUresult.CUDA_SUCCESS:
