@@ -27,7 +27,7 @@ manifest = cutlass_manifest.Manifest(args=SimpleNamespace(**dict(
 )))
 generator.GenerateSM80_Simt_f32(manifest, None)
 
-operation = manifest.operations_by_name['cutlass_simt_sgemm_256x128_8x5_nn_align1']
+operation = manifest.operations_by_name['cutlass_simt_sgemm_256x128_8x5_nt_align1']
 
 gemm = rt.Gemm(operation)
 
