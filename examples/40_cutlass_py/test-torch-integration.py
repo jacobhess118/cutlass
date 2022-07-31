@@ -115,4 +115,7 @@ if err != cuda.CUresult.CUDA_SUCCESS:
 torch.cuda.synchronize()
 print(f"tensor_D_torch: {tensor_D_torch}")
 
-print(f"PyTorch result: {torch.mm(tensor_A_torch, tensor_B_torch) + tensor_C_torch}")
+pt_result = tensor_A_torch @ tensor_B_torch + tensor_C_torch
+print(f"PyTorch result: {pt_result}")
+
+assert torch.allclose(tensor_D_torch, pt_result)
