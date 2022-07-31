@@ -67,10 +67,10 @@ tensor_D_torch = torch.empty(M, N, device='cuda', dtype=torch.float32)  # D
 
 arguments = rt.GemmArguments()
 arguments.problem_size = rt.GemmCoord(M, N, K)
-arguments.A = rt.TensorRef(tensor_A_torch.data_ptr(), tensor_A_torch.stride()[0])
-arguments.B = rt.TensorRef(tensor_B_torch.data_ptr(), tensor_B_torch.stride()[0])
-arguments.C = rt.TensorRef(tensor_C_torch.data_ptr(), tensor_C_torch.stride()[0])
-arguments.D = rt.TensorRef(tensor_D_torch.data_ptr(), tensor_D_torch.stride()[0])
+arguments.A = rt.TensorRef(cuda.CUdeviceptr(tensor_A_torch.data_ptr()), tensor_A_torch.stride()[0])
+arguments.B = rt.TensorRef(cuda.CUdeviceptr(tensor_B_torch.data_ptr()), tensor_B_torch.stride()[0])
+arguments.C = rt.TensorRef(cuda.CUdeviceptr(tensor_C_torch.data_ptr()), tensor_C_torch.stride()[0])
+arguments.D = rt.TensorRef(cuda.CUdeviceptr(tensor_D_torch.data_ptr()), tensor_D_torch.stride()[0])
 
 host_workspace = bytearray(gemm.get_host_workspace_size(arguments))
 device_workspace = None
@@ -78,8 +78,6 @@ device_workspace = None
 launch_config = gemm.plan(arguments)
 
 byte_count = gemm.initialize(host_workspace, device_workspace, launch_config, arguments)
-
-print(f"byte_count: {byte_count}")
 
 err = gemm.run(host_workspace, device_workspace, launch_config)
 
