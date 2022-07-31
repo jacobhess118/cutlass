@@ -1,4 +1,5 @@
 import torch
+import numpy as np
 from types import SimpleNamespace
 from ctypes import c_void_p
 from cuda import cuda
