@@ -45,9 +45,10 @@ compilation_options = rt.CompilationOptions(architectures, include_paths)
 
 module = rt.Module('module.cu', [gemm], compilation_options)
 
-M, N, K = (3, 4, 5)
-
 # Formula: D = alpha * (A @ B) + beta * C
+M, N, K = (3, 4, 5)
+alpha = 1.0
+beta = 1.0
 
 tensor_A_torch = torch.arange(M*K, device='cuda', dtype=torch.float32).view(M, K)  # A
 tensor_B_torch = torch.arange(K*N, device='cuda', dtype=torch.float32).view(K, N)  # B
@@ -66,6 +67,8 @@ arguments.A = rt.TensorRef(tensor_A_torch.data_ptr(), tensor_A_torch.stride()[0]
 arguments.B = rt.TensorRef(tensor_B_torch.data_ptr(), tensor_B_torch.stride()[0])
 arguments.C = rt.TensorRef(tensor_C_torch.data_ptr(), tensor_C_torch.stride()[0])
 arguments.D = rt.TensorRef(tensor_D_torch.data_ptr(), tensor_D_torch.stride()[0])
+arguments.output_op.alpha = alpha
+arguments.output_op.beta = beta
 
 host_workspace = bytearray(gemm.get_host_workspace_size(arguments))
 device_workspace = None
