@@ -82,9 +82,7 @@ err = gemm.run(host_workspace, device_workspace, launch_config)
 if err != cuda.CUresult.CUDA_SUCCESS:
   raise RuntimeError('CUDA Error %s' % str(err))
 
-torch.cuda.synchronize()
 print(f"tensor_D_torch: {tensor_D_torch}")
 print(f"PyTorch result: {pt_result}")
 
-# TODO: for some weird reason, tensor C is not being used in following GEMM operation
 assert torch.allclose(tensor_D_torch, pt_result)
