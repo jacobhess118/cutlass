@@ -11,25 +11,9 @@ import rt
 cuda_ver = "11.4"
 cuda_arch = "80"  # assuming A100
 
-# manifest = cutlass_manifest.Manifest(args=SimpleNamespace(**dict(
-#   operations="all",
-#   build_dir=".",
-#   curr_build_dir=".",
-#   generator_target="library",
-#   architectures=cuda_arch,
-#   kernels="",
-#   ignore_kernels="",
-#   filter_by_cc="True",
-#   cuda_version=cuda_ver,
-#   kernel_filter_file=None,
-#   selected_kernel_list=None,
-#   interface_dir=None,
-# )))
-# generator.GenerateSM80_Simt_f32(manifest, None)
 manifest = cutlass_manifest.Manifest()
 generator.GenerateSM50_Simt(manifest, cuda_ver)
 
-# operation = manifest.operations_by_name['cutlass_simt_sgemm_256x128_8x5_nt_align1']
 operation = manifest.operations_by_name['cutlass_simt_sgemm_128x128_8x2_nn_align1']
 
 gemm = rt.Gemm(operation)
@@ -94,25 +78,6 @@ err = gemm.run(host_workspace, device_workspace, launch_config)
 
 if err != cuda.CUresult.CUDA_SUCCESS:
   raise RuntimeError('CUDA Error %s' % str(err))
-
-#
-# Debug reporting of byte array contents
-#
-
-# def PrintBytearray(host_workspace):
-#   uint_str = None
-#   prefix = None
-#   print("uint32_t host_workspace[] = {")
-#   for idx, byte in enumerate(host_workspace):
-#     if not (idx % 4):
-#       if uint_str is not None:
-#         print(prefix, uint_str, ",")
-#       prefix = "/* offset: %d B */    0x" % idx
-#       uint_str = ""
-#     uint_str = "{:02x}".format(byte) + uint_str
-#   print("};")
-
-# PrintBytearray(host_workspace)
 
 torch.cuda.synchronize()
 print(f"tensor_D_torch: {tensor_D_torch}")
