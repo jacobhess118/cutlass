@@ -1,3 +1,16 @@
+"""
+srun -p train --pty --cpus-per-task=96 -t 15:00:00 --gpus-per-node=8 --exclusive bash
+conda activate torch_nightly_cuda
+
+pip install cuda-python
+export PYTHONPATH=/fsx/users/${USER}/cutlass/tools/library/scripts:$PYTHONPATH
+cd /fsx/users/${USER}/cutlass/
+python examples/40_cutlass_py/test-torch-integration.py
+
+# For debugging:
+CUDA_LAUNCH_BLOCKING=1 python examples/40_cutlass_py/test-torch-integration.py
+"""
+
 import torch
 import numpy as np
 from types import SimpleNamespace
@@ -14,8 +27,10 @@ cuda_arch = "80"  # assuming A100
 manifest = cutlass_manifest.Manifest()
 generator.GenerateSM50_Simt(manifest, cuda_ver)
 
+print(manifest.operations_by_name)
 operation = manifest.operations_by_name['cutlass_simt_sgemm_128x128_8x2_nn_align1']
 
+# TODO: can pass custom functor, e.g. `output_op = LinearCombinationReluFunctor()` if we have more pointwise ops to fuse
 gemm = rt.Gemm(operation)
 
 err, = cuda.cuInit(0)
@@ -52,7 +67,7 @@ beta = 1.0
 
 tensor_A_torch = torch.arange(M*K, device='cuda', dtype=torch.float32).view(M, K)  # A
 tensor_B_torch = torch.arange(K*N, device='cuda', dtype=torch.float32).view(K, N)  # B
-tensor_C_torch = torch.arange(M*N, device='cuda', dtype=torch.float32).view(M, N)  # C
+tensor_C_torch = torch.arange(M*N, device='cuda', dtype=torch.float32).view(M, N)  # C, full-size, no broadcast
 tensor_D_torch = torch.empty(M, N, device='cuda', dtype=torch.float32)  # D
 
 pt_result = tensor_A_torch @ tensor_B_torch + tensor_C_torch
@@ -67,6 +82,7 @@ arguments.A = rt.TensorRef(tensor_A_torch.data_ptr(), tensor_A_torch.stride()[0]
 arguments.B = rt.TensorRef(tensor_B_torch.data_ptr(), tensor_B_torch.stride()[0])
 arguments.C = rt.TensorRef(tensor_C_torch.data_ptr(), tensor_C_torch.stride()[0])
 arguments.D = rt.TensorRef(tensor_D_torch.data_ptr(), tensor_D_torch.stride()[0])
+# TODO(yf225): can pass custom functor arguments: `arguments.output_op = LinearCombinationReluFunctorArguments(...)` if we have more pointwise ops to fuse
 arguments.output_op.alpha = alpha
 arguments.output_op.beta = beta
 
