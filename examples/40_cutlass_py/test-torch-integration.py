@@ -2,9 +2,31 @@
 srun -p train --pty --cpus-per-task=96 -t 15:00:00 --gpus-per-node=8 --exclusive bash
 conda activate torch_nightly_cuda
 
+# First time
 pip install cuda-python
-export PYTHONPATH=/fsx/users/${USER}/cutlass/tools/library/scripts:$PYTHONPATH
+
+export CUDA_VER_SHORT=114
+export CUDA_VER=11.4
+
+module unload cuda nccl nccl_efa
+module load cuda/${CUDA_VER}
+module load nccl/2.12.7-cuda.${CUDA_VER}
+module load nccl_efa/1.2.0-nccl.2.12.7-cuda.${CUDA_VER}
+
+export CUDA_HOME=/usr/local/cuda-${CUDA_VER}
+export PATH=${CUDA_HOME}/bin:$PATH
+export LD_LIBRARY_PATH=${CUDA_HOME}:${CUDA_HOME}/lib:${CUDA_HOME}/lib64:${CUDA_HOME}/targets/x86_64-linux/lib:${CUDA_HOME}/extras/CUPTI/lib64:$LD_LIBRARY_PATH
+export CFLAGS=-I${CUDA_HOME}/include  # This helps CuPy find the right NCCL version
+export LDFLAGS=-L${CUDA_HOME}/lib  # This helps CuPy find the right NCCL version
+export CUDA_TOOLKIT_PATH=${CUDA_HOME}
+export CUDNN_INSTALL_PATH=${CUDA_HOME}
+
+export CUDACXX=${CUDA_HOME}/bin/nvcc
 cd /fsx/users/${USER}/cutlass/
+mkdir build && cd build
+cmake .. -DCUTLASS_NVCC_ARCHS=80               # compiles for NVIDIA Ampere GPU architecture
+
+export PYTHONPATH=/fsx/users/${USER}/cutlass/tools/library/scripts:$PYTHONPATH
 python examples/40_cutlass_py/test-torch-integration.py
 
 # For debugging:
