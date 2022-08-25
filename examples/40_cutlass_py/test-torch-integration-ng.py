@@ -45,14 +45,26 @@ import manifest as cutlass_manifest
 import generator
 import rt
 
-cuda_ver = "11.4"
+# cuda_ver = "11.4"
+# cuda_arch = "80"  # assuming A100
+
+# manifest = cutlass_manifest.Manifest()
+# generator.GenerateSM50_Simt(manifest, cuda_ver)
+
+# print(manifest.operations_by_name)
+# operation = manifest.operations_by_name['cutlass_simt_sgemm_128x128_8x2_nn_align1']
+
+cuda_ver = "11.6"
 cuda_arch = "80"  # assuming A100
 
 manifest = cutlass_manifest.Manifest()
-generator.GenerateSM50_Simt(manifest, cuda_ver)
-
+generator.GenerateSM80_TensorOp_16816(manifest, cuda_ver)
 print(manifest.operations_by_name)
-operation = manifest.operations_by_name['cutlass_simt_sgemm_128x128_8x2_nn_align1']
+
+# cutlass_tensorop_bf16_s16816gemm_bf16_256x128_32x3_nt_align8
+operation = manifest.operations_by_name['cutlass_tensorop_bf16_s16816gemm_bf16_256x128_32x3_nt_align8']
+
+# ====
 
 # TODO: can pass custom functor, e.g. `output_op = LinearCombinationReluFunctor()` if we have more pointwise ops to fuse
 gemm = rt.Gemm(operation)
