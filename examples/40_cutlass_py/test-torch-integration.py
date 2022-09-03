@@ -27,8 +27,8 @@ mkdir build && cd build
 cmake .. -DCUTLASS_NVCC_ARCHS=80               # compiles for NVIDIA Ampere GPU architecture
 
 # Then
-cd /fsx/users/${USER}/cutlass/examples/40_cutlass_py
 export PYTHONPATH=/fsx/users/${USER}/cutlass/tools/library/scripts:$PYTHONPATH
+cd /fsx/users/${USER}/cutlass/examples/40_cutlass_py
 python test-torch-integration.py
 
 # For debugging:
